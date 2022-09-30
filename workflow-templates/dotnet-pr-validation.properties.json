@@ -1,0 +1,13 @@
+{
+    "name": ".NET PR Validation Workflow",
+    "description": "Starter workflow used to implement Pull Request validation for .NET applications.",
+    "iconName": "example-icon",
+    "categories": [
+        ".NET",
+        "Docker"
+    ],
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile"
+    ]
+}
