@@ -1,0 +1,37 @@
+name: Pull Request Validation
+
+on:
+  workflow_dispatch: # manual trigger
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+      - converted_to_draft
+    branches:
+      - develop
+      - main
+      - hotfix
+      - release
+jobs:
+  load-variables:
+    name: Load Variables
+    uses: thiago-osantos/CD.POC.Deploy/.github/workflows/load-variables.yaml@main    
+  validate:
+    name: Validate PR
+    uses: thiago-osantos/POC.Workflows/.github/workflows/dotnet-pr-validation.yml@main
+    with:
+      package-url: ${{ needs.load-variables.outputs.packageUrl }}
+      path-to-dockerfile: "{-PATH_TO_DOCKERFILE-}"
+      path-to-test-project: "{-PATH_TO_TEST_PROJECT-}"
+      solution: "{-SOLUTION-NAME-}"
+      sonarqube-url: ${{ needs.load-variables.outputs.sonarqubeUrl }}
+    secrets:
+      package-owner: ${{ secrets.PACKAGE_OWNER_NAME }}
+      package-consumer-token: ${{ secrets.PACKAGE_CONSUMER_TOKEN }}
+      polaris-access-token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+      polaris-server-url: ${{ secrets.POLARIS_SERVER_URL }}
+      snyk-token: ${{ secrets.SNYK_TOKEN }}
+      sonarqube-token: ${{ secrets.SONAR_TOKEN }}
+      sonarqube-github-token: ${{ secrets.SONAR_GITHUB_TOKEN }}
